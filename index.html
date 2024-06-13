@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #pokemon-image {
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin: 20px;
+    }
+    #pokemon-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pokémon Viewer</h1>
+  <img id="pokemon-image" src="" alt="Pokémon Image">
+  <h2 id="pokemon-name"></h2>
+  <button class="button" id="prev-button">Previous</button>
+  <button class="button" id="next-button">Next</button>
+
+  <script>
+    const apiUrl = 'https://pokeapi.co/api/v2/';
+    let currentPokemonId = 1;
+    let pokemonCache = {};
+
+    function fetchPokemon(id) {
+  if (pokemonCache[id]) {
+    return Promise.resolve(pokemonCache[id]);
+  }
+  const url = `${apiUrl}pokemon/${id}`;
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error fetching Pokémon ${id}: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      pokemonCache[id] = data;
+      return data;
+    });
+}
+
+    function renderPokemon(pokemon) {
+      const pokemonImage = document.getElementById('pokemon-image');
+      const pokemonName = document.getElementById('pokemon-name');
+      pokemonImage.src = pokemon.sprites.front_default;
+      pokemonName.textContent = pokemon.name;
+    }
+
+    function fetchAndRenderPokemon(id) {
+      fetchPokemon(id).then(pokemon => renderPokemon(pokemon));
+    }
+
+    fetchAndRenderPokemon(currentPokemonId);
+
+    document.getElementById('prev-button').addEventListener('click', () => {
+      currentPokemonId -= 1;
+      if (currentPokemonId < 1) {
+        currentPokemonId = 1;
+      }
+      fetchAndRenderPokemon(currentPokemonId);
+    });
+
+    document.getElementById('next-button').addEventListener('click', () => {
+      currentPokemonId += 1;
+      fetchAndRenderPokemon(currentPokemonId);
+    });
+  </script>
+</body>
+</html>
