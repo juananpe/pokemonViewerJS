@@ -67,7 +67,8 @@
       const pokemonImage = document.getElementById('pokemon-image');
       const pokemonName = document.getElementById('pokemon-name');
       pokemonImage.src = pokemon.sprites.front_default;
-      pokemonName.textContent = pokemon.name;
+      pokemonName.textContent = 
+	     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
     }
 
     function fetchAndRenderPokemon(id) {
