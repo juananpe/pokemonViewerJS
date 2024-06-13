@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +10,20 @@
       font-family: Arial, sans-serif;
       text-align: center;
     }
+
     #pokemon-image {
       width: 200px;
       border: 1px solid #ccc;
       border-radius: 10px;
       margin: 20px;
     }
+
     #pokemon-name {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
     }
+
     .button {
       background-color: #4CAF50;
       color: #fff;
@@ -28,11 +32,13 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     .button:hover {
       background-color: #3e8e41;
     }
   </style>
 </head>
+
 <body>
   <h1>Pokémon Viewer</h1>
   <img id="pokemon-image" src="" alt="Pokémon Image">
@@ -46,29 +52,29 @@
     let pokemonCache = {};
 
     function fetchPokemon(id) {
-  if (pokemonCache[id]) {
-    return Promise.resolve(pokemonCache[id]);
-  }
-  const url = `${apiUrl}pokemon/${id}`;
-  return fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error fetching Pokémon ${id}: ${response.status}`);
+      if (pokemonCache[id]) {
+        return Promise.resolve(pokemonCache[id]);
       }
-      return response.json();
-    })
-    .then(data => {
-      pokemonCache[id] = data;
-      return data;
-    });
-}
+      const url = `${apiUrl}pokemon/${id}`;
+      return fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Error fetching Pokémon ${id}: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          pokemonCache[id] = data;
+          return data;
+        });
+    }
 
     function renderPokemon(pokemon) {
       const pokemonImage = document.getElementById('pokemon-image');
       const pokemonName = document.getElementById('pokemon-name');
       pokemonImage.src = pokemon.sprites.front_default;
-      pokemonName.textContent = 
-	     pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+      pokemonName.textContent =
+        pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
     }
 
     function fetchAndRenderPokemon(id) {
@@ -91,4 +97,5 @@
     });
   </script>
 </body>
+
 </html>
